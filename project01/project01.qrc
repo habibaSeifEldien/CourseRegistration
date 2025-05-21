@@ -1,0 +1,17 @@
+<RCC>
+  <qresource prefix="project01">
+    <file>Mobile login-amico.png</file>
+    <file>Sign up-cuate.png</file>
+    <file>Secure login-rafiki.png</file>
+    <file>Computer login-rafiki.png</file>
+  </qresource>
+  <qresource prefix="newPrefix">
+    <file>Privacy policy-rafiki.png</file>
+  </qresource>
+  <qresource prefix="newPrefix">
+    <file>Screenshot_2025-05-15_005716-removebg-preview.png</file>
+  </qresource>
+  <qresource prefix="welcome">
+    <file>Onboarding-cuate (1).png</file>
+  </qresource>
+</RCC>

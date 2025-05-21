@@ -1,0 +1,24 @@
+﻿   Qt/MSBuild: 3.3.1.1
+  Reading Qt configuration (C:/Qt/6.9.0/msvc2022_64/bin/qmake)
+   Qt: 6.9.0
+  uic project01.ui
+  rcc project01.qrc
+  moc project01.h
+  files.cpp
+  Student.cpp
+  User.cpp
+  Admin.cpp
+  Course.cpp
+  project01.cpp
+  main.cpp
+C:\Users\thura\source\repos\project01\project01\files.cpp(94,23): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\thura\source\repos\project01\project01\files.cpp(95,24): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\thura\source\repos\project01\project01\files.cpp(96,25): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\Users\thura\source\repos\project01\project01\Admin.cpp(51,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\thura\source\repos\project01\project01\Admin.cpp(53,12): warning C4305: '=': truncation from 'int' to 'char'
+C:\Users\thura\source\repos\project01\project01\Admin.cpp(53,12): warning C4309: '=': truncation of constant value
+C:\Users\thura\source\repos\project01\project01\Course.cpp(29,1): warning C4715: 'Course::getcourse': not all control paths return a value
+C:\Users\thura\source\repos\project01\project01\Student.cpp(122,1): warning C4715: 'Student::checkPrerequisites': not all control paths return a value
+  qrc_project01.cpp
+  moc_project01.cpp
+  project01.vcxproj -> C:\Users\thura\source\repos\project01\x64\Debug\project01.exe
