@@ -1,0 +1,5 @@
+studentID,courseCode,courseTitle,midterm,yearwork,final,grade,points
+2023170302,CS103,Algorithms,15,29,40,B,3
+2023170302,CS102,Data Structures,28,24,40,A,3
+2023170302,CS101,Introduction to Programming,30,25,40,A,4
+2023170200,CS102,Data Structures,11,25,30,B,3

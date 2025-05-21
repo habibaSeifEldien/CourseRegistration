@@ -19,23 +19,19 @@ void Student::viewGrade()
         cout << "course name " << it.first << endl << "Midtearm " << get<0>(it.second) << endl << "Yearwork " << get<1>(it.second) << endl << "Grade " << get<2>(it.second) << endl << "Points " << get<3>(it.second) << endl << "Final " << get<4>(it.second) << endl;
     }
 }
-void Student::showAvailableCourses(map<string, Course>file) {
+void Student::showAvailableCourses(unordered_map<string, Course>file) {
     cout << "Available Course:\n";
     auto it = file.begin();
     for (; it != file.end(); it++) {
-        if (it->second.maxseets != 0) {
+        if (it->second.maxseats != 0) {
             cout << "-------------------------------------------------------------\n";
             cout << "| Course Name |\tCourse Code |\tCourse Hours |\n";
             cout << "| " << it->second.courseTitle << " |\t" << it->second.courseCode << " |\t" << it->second.courseHours << " |\n";
             cout << "-------------------------------------------------------------\n";
         }
-
-
     }
-
 }
-
-void Student::searchforCourses(map<string, Course> file) {
+void Student::searchforCourses(unordered_map<string, Course> file) {
     string answer, ansRegister;
     Course ansCourse;
     do {
@@ -78,30 +74,26 @@ void Student::searchforCourses(map<string, Course> file) {
     } while (toLower(answer) == "y" || answer != "exit");
 }
 bool Student::checkPrerequisites(Course& course) {
-    for (auto CourseRegisted : registedcourses) {// map[studentid]
+    for (auto CourseRegisted : registedcourses) {
         if (CourseRegisted == course.courseTitle) {
             cout << "This Course is Already Registered\n";
             return false;
-
         }
     }
     if ((currenthours + course.courseHours) > maxhours) {
-
         cout << "Maximum limit of Hours,Cannot Register Another Course\n";
         return false;
     }
     if (course.preReqisites.empty()) {
         cout << "pre req empty";
-        return true;//the strudent can registe the course
+        return true;
     }
     bool precoursesDone = false;
-    string cname;
     for (string precourse : course.preReqisites) {
-        for (auto it : grades) {
-            cname = it.first;
-            char grade = get<3>(it.second);
-            if (precourse == cname) {
-                if (grade == 'F') {
+        for (auto it : this->grades) {
+            std::string grade = string(get<3>(it.second));
+            if (file.trim(file.Lower_Case(precourse)) == file.trim(file.Lower_Case(it.first))) {
+                if (grade == "F") {
                     precoursesDone = false;
                     break;
                 }
@@ -111,35 +103,27 @@ bool Student::checkPrerequisites(Course& course) {
             }
         }
         if (!precoursesDone) {
-            cout << "The Student must complete this course first \n Course:" + precourse;//the strudent can not registe the course
+            cout << "The Student must complete this course first \n Course:" + precourse;
             return false;
         }
     }
-    if (precoursesDone) {
-        cout << "can";
-        return true;//the strudent can registe the course
-    }
+    return true;
 }
 bool Student::registration(Course& co) {
-    if (co.maxseets == 0) {
-       // cout<<""
-        return false;
-    
-    }
-    if (checkPrerequisites(co)) {
-        this->currenthours += co.courseHours;
-        co.maxseets--;
-        registedcourses.insert(co.courseTitle);
-        return true;
+    if (co.currseats < co.maxseats) {
+        if (checkPrerequisites(co)) {
+            this->currenthours += co.courseHours;
+            co.currseats++;
+            this->registedcourses.insert(co.courseTitle);
+            return true;
+        }
     }
     return false;
 }
-
-
-bool Student::dropCourse(string coursename) {
+bool Student::dropCourse(Course& course) {
     bool found = false;
     for (auto registed : registedcourses) {
-        if (coursename == registed) {
+        if (course.courseTitle == registed) {
             found = true;
             break;
         }
@@ -149,8 +133,10 @@ bool Student::dropCourse(string coursename) {
         return false;
     }
     else {
-        if (get<0>(grades[coursename]) == NULL) {
-            registedcourses.erase(coursename);
+        if (grades.find(course.courseTitle) == grades.end()) {
+            course.currseats--;
+            this->currenthours -= course.courseHours;
+            registedcourses.erase(course.courseTitle);
             cout << "Course dropped successfully.\n";
             return true;
         }
@@ -170,9 +156,6 @@ Student& Student::getstudent(string id)
 
     throw std::runtime_error("Student not found");
 }
-
-
-
 void Student::makeReport() {
     cout << "Student Grade Report\n\n";
     cout << "Student Name: " << this->name << endl;

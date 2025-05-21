@@ -25,18 +25,17 @@ public:
     void calculatGpa(Student& s);
     void waitlist(Student& s);
     void manageGrades(string id);
-    void updateGrades(string studid, string coursename);
-    void AddGrades(string studid, string coursename);
+    void updateGrades(Student& s, string coursename, int grade, int choice);
+    bool AddGrades(Student& s, string coursename, int grade, int choice, string);
 
     void printCourses();
-    void setprereq(Course& c);
-    void UpdateMaxSeats(Course& c);
-    void UpdateInstructor(Course& c);
+    void setprereq(Course& c, list<string>);
+    void UpdateMaxSeats(Course& c, int);
+    void UpdateInstructor(Course& c, string);
     void Upload_Course(string courseCode, int courseHours, string courseTitle, string instructor, list<string>preReqisites, int maxseets);
-    void DeleteCourse(string courseTitle);
-    void UpdatePrereq(Course& c);
-    Course& findCourse(string courseTitle);
-    
+    bool DeleteCourse(string courseTitle);
+    bool UpdatePrereq(Course& c, string, bool);
+
 
 
 };

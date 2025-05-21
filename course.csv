@@ -1,0 +1,11 @@
+courseCode,courseTitle,instructor,preReqisites,maxSeats,courseHours
+CS101,Introduction to Programming,Dr. Smith,:,30,3
+CS102,Data Structures,Dr. Johnson,Introduction to Programming:,30,3
+CS103,Algorithms,Dr. Lee,Data Structures:,30,3
+CS104,Database Systems,Dr. Brown,Data Structures:,30,3
+CS105,Software Engineering,Dr. White,Introduction to Programming:,30,3
+CS106,Operating Systems,Dr. Green,Data Structures:,30,3
+CS107,Computer Networks,Dr. Gray,Algorithms:,30,3
+CS108,Artificial Intelligence,Dr. Blue,Data Structures:,30,3
+CS109,Machine Learning,Dr. Red,Database Systems:,30,3
+CS110,Computer Security,Dr. Purple,Algorithms:,30,3

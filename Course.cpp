@@ -1,29 +1,26 @@
 #include "Course.h"
 #include "Student.h"
-
-
 Course::Course() {}
-Course::Course(string courseCode, int courseHours, string courseTitle, string instructor, list<string> preReqisites, int maxseets) {
-	this->courseCode = courseCode;
-	this->courseHours = courseHours;
-	this->courseTitle = courseTitle;
-	this->instructor = instructor;
-	this->preReqisites = preReqisites;
-	this->maxseets = maxseets;
+Course::Course(string courseCode, int courseHours, string courseTitle, string instructor, list<string> preReqisites, int maxseats, int currseats) {
+    this->courseCode = courseCode;
+    this->courseHours = courseHours;
+    this->courseTitle = courseTitle;
+    this->instructor = instructor;
+    this->preReqisites = preReqisites;
+    this->maxseats = maxseats;
+    this->currseats = currseats;
 
 }
-
 void Course::print()
 {
-	std::cout << "Course Name: " << courseTitle;
-	std::cout << endl << "Credit Hours: " << courseHours << endl << "Instructor: " << instructor << std::endl;
+    cout << "Course Name: " << courseTitle;
+    cout << endl << "Credit Hours: " << courseHours << endl << "Instructor: " << instructor << std::endl;
 }
 Course Course::getcourse(string coursename)
 {
-	for (auto it : files::courses)
-	{
-		if (coursename == it.first) { return it.second; }
-		else return Course();
-	}
-
+    auto it = files::courses.find(coursename);
+    if (it != files::courses.end()) {
+        return it->second;
+    }
+    return Course();
 }

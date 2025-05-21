@@ -1,9 +1,41 @@
 <RCC>
   <qresource prefix="project01">
+    <file>Pull request-amico.png</file>
+    <file>Static assets-pana.png</file>
+    <file>Inbox cleanup-pana.png</file>
+    <file>Coding workshop-pana.png</file>
+    <file>Update-amico.png</file>
+    <file>remove.png</file>
+    <file>delete.png</file>
+    <file>education.png</file>
+    <file>graduation.png</file>
+    <file>evaluation.png</file>
+    <file>Course app-pana.png</file>
+    <file>Course app-pana.png</file>
+    <file>school.png</file>
+    <file>instructor.png</file>
+    <file>book.png</file>
+    <file>test_3.png</file>
+    <file>Admin-cuate.png</file>
+    <file>delete.png</file>
+    <file>grade.png</file>
+    <file>report.png</file>
+    <file>Screenshot_2025-05-15_005716-removebg-preview.png</file>
+    <file>Secure login-rafiki.png</file>
+    <file>Sign up-cuate.png</file>
+    <file>Mobile login-amico.png</file>
+    <file>Onboarding-cuate (1).png</file>
+    <file>Privacy policy-rafiki.png</file>
     <file>Mobile login-amico.png</file>
     <file>Sign up-cuate.png</file>
     <file>Secure login-rafiki.png</file>
     <file>Computer login-rafiki.png</file>
+  </qresource>
+  <qresource prefix="newPrefix">
+    <file>ballot.png</file>
+    <file>Coding-amico-removebg-preview.png</file>
+    <file>Computer login-rafiki.png</file>
+    <file>Computer_login-rafiki.png</file>
   </qresource>
   <qresource prefix="newPrefix">
     <file>Privacy policy-rafiki.png</file>

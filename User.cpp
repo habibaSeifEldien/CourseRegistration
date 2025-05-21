@@ -62,79 +62,48 @@ bool User::validateMobileFormat(string StudentMobile) {
 
 	return true;
 }
-
-
-void User::signUp(map<string, Student>& mails) {
-	string StudentName, ND, DateOfBirth, Nationality, StudentMobile, Gender, StudentEmail, password, ID;
-	int year;
-	cout << "Create New Student Account" << endl;
-	cout << "Full Name" << endl;
-	getline(cin >> ws, StudentName);
-	cout << "Enter year";
-	cin >> year;
-	cout << "National Number" << endl;
-	getline(cin >> ws, ND);
-	cout << "Date Of Birth" << endl;
-	getline(cin >> ws, DateOfBirth);
-	cout << "Nationality" << endl;
-	getline(cin >> ws, Nationality);
-	cout << "Student Mobile Number" << endl;
-	getline(cin >> ws, StudentMobile);
-	while (!validateMobileFormat(StudentMobile)) {
-		cout << "Invalid mobile number.Please enter a valid mobile number." << endl;
-		cout << "Student Mobile Number" << endl;
-		getline(cin, StudentMobile);
-	}
-	cout << "Gender" << endl;
-	getline(cin, Gender);
-	cout << "Student E-mail" << endl;
-	getline(cin, StudentEmail);
-	while (!validateEmailFormat(StudentEmail)) {
-		cout << "Oops! That doesn?t look like a valid email address. Could you double-check it?" << endl;
-		getline(cin, StudentEmail);
-
-	}
-	cout << "Password" << endl;
-	getline(cin, password);
-	cout << "ID" << "\n";
-	getline(cin, ID);
-	mails[StudentName].id = ID;
-	mails[StudentName].name = StudentName;
-	mails[StudentName].studentemail = StudentEmail;
-	mails[StudentName].password = password;
-	mails[StudentName].year = year;
+bool User::signUp(string studname, string email, int year, string pass, string dob, string nationality, string mobile, string gender) {
+	string ID = File.getNextStudentID();
+	File.mails[studname].id = ID;
+	File.mails[studname].name = studname;
+	File.mails[studname].studentemail = email;
+	File.mails[studname].password = pass;
+	File.mails[studname].year = year;
 	//currhours
 	//maxhours
 	//gpa
-	mails[StudentName].birthdate = DateOfBirth;
-	mails[StudentName].nationalty = Nationality;
-	mails[StudentName].mobilenumber = StudentMobile;
-	mails[StudentName].gender = Gender;
+	File.mails[studname].birthdate = dob;
+	File.mails[studname].nationalty = nationality;
+	File.mails[studname].mobilenumber = mobile;
+	File.mails[studname].gender = gender;
 	//courses
 		// Open the file in append mode and write the new student data
 	ofstream file("students.csv", ios::app);
 	if (file.is_open()) {
-		file << ID << "," << StudentName << "," << StudentEmail << "," << password << "," << year << ","
-			<< 0 << "," << 18 << "," << NULL << "," << DateOfBirth << "," << Nationality << "," << StudentMobile << "," << Gender << "," << NULL;
+		file << ID << "," << studname << "," << email << "," << pass << "," << year << ","
+			<< 0 << "," << 18 << "," << NULL << "," << dob << "," << nationality << "," << mobile << "," << gender << "," << NULL;
 		file.close();
 		cout << "Account created and data saved to file!" << endl;
+		return true;
 	}
 	else {
 		cout << "Error: Could not open file to save data." << endl;
+		return false;
 	}
 }
-bool User::signIn(map<string, Student>mails, map<string, Student>fullstud, Student& s) {
-	string studentName, password;
+bool User::signIn(string& name, string& pass, unordered_map<string, Student>mails, unordered_map<string, Student>fullstud, Student& s) {
+	/*string studentName, password;
 	cout << "If you have an account, sign in." << endl;
 	cout << "Enter your name: ";
 	getline(cin >> ws, studentName);
 	string Name = File.Lower_Case(studentName);
-	cout << Name << endl;
+	cout << Name << endl;*/
+	string Name = File.Lower_Case(name);
 	if (mails.count(Name) > 0) {
-		cout << "Enter your password: ";
-		getline(cin, password);
-		if (mails[File.trim(Name)].password == File.trim(password)) {
-			cout << "Welcome, " << Name << "!" << endl;
+		/*cout << "Enter your password: ";
+		getline(cin, password);*/
+		if (mails[File.trim(Name)].password == File.trim(pass)) {
+			//cout << "Welcome, " << Name << "!" << endl;
 			string id = mails[Name].id;
 			if (fullstud.count(id)) {
 				s = fullstud[id];  // this includes grades
@@ -145,20 +114,19 @@ bool User::signIn(map<string, Student>mails, map<string, Student>fullstud, Stude
 			return true;
 		}
 		else {
-			cout << "Incorrect password." << endl; return false;
+			/*cout << "Incorrect password." << endl;*/
+			return false;
 		}
 
 	}
 	else {
-		cout << "Invalid studentName or password." << endl;
-		cout << "Please try again." << endl;
+		/*cout << "Invalid studentName or password." << endl;
+		cout << "Please try again." << endl;*/
 		return false;
 	}
 }
-
-
-void User::createAdminAccount() {
-	string FullName, Password, Email, ID;
+bool User::createAdminAccount(string& name, string& pass, string& email, string& id) {
+	/*string FullName, Password, Email, ID;
 	cout << "Create New Admin Account" << endl;
 	cout << "Full Name" << endl;
 	getline(cin >> ws, FullName);
@@ -172,46 +140,49 @@ void User::createAdminAccount() {
 
 	}
 	cout << "National Number" << endl;
-	getline(cin >> ws, ID);
+	getline(cin >> ws, ID);*/
 
-	File.adminMails[File.Lower_Case(File.trim(FullName))].password = File.trim(Password);
+	File.adminMails[File.Lower_Case(File.trim(name))].password = File.trim(pass);
 
 	// Open the file in append mode and write the new student data
 	ofstream file("admins.csv", ios::app);
 	if (file.is_open()) {
-		file << FullName << "," << Password << "," << Email << "," << ID << endl;
+		file << name << "," << pass << "," << email << "," << id << endl;
 		file.close();
 		cout << "Account created and data saved to file!" << endl;
+		return true;
 	}
 	else {
 		cout << "Error: Could not open file to save data." << endl;
+		return false;
 	}
 
 
 }
-bool User::accessAdminAccount(map<string, Admin>adminMails, Admin& a)
+bool User::accessAdminAccount(string& name, string& pass, unordered_map<string, Admin>adminMails, Admin& a)
 {
-	string FullName, Password;
+
+	/*string FullName, Password;
 	cout << "If you have an account, sign in." << endl;
 	cout << "Enter your full name: ";
-	getline(cin >> ws, FullName);
-	string Name = File.Lower_Case(File.trim(FullName));
+	getline(cin >> ws, FullName);*/
+	string Name = File.Lower_Case(File.trim(name));
 	if (adminMails.count(Name) > 0) {
-		cout << "Enter your password: ";
-		getline(cin >> ws, Password);
-		if (adminMails[File.trim(Name)].password == File.trim(Password)) {
-			cout << "Welcome, " << Name << "!" << endl;
+		/*cout << "Enter your password: ";
+		getline(cin >> ws, Password);*/
+		if (adminMails[File.trim(Name)].password == File.trim(pass)) {
+			/*cout << "Welcome, " << name << "!" << endl;*/
 			a = adminMails[Name];
 			return true;
 		}
 		else {
-			cout << "Incorrect password." << endl;
+			/*	cout << "Incorrect password." << endl;*/
 			return false;
 		}
 	}
 	else {
-		cout << "Invalid Name or password." << endl;
-		cout << "Please try again." << endl;
+		/*cout << "Invalid Name or password." << endl;
+		cout << "Please try again." << endl;*/
 		return false;
 	}
 }

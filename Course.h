@@ -15,7 +15,8 @@ public:
     string courseCode;
     string courseTitle;
     string  instructor;
-    int maxseets;
+    int maxseats;
+    int currseats;
     float yearwork = NULL;
     float midterm = NULL;
     float final = NULL;
@@ -23,9 +24,8 @@ public:
     int points = NULL;
     list<string>preReqisites;
     Course();
-    Course(string courseCode, int courseHours, string courseTitle, string instructor, list<string> preReqisites, int maxseets);
+    Course(string courseCode, int courseHours, string courseTitle, string instructor, list<string> preReqisites, int maxseets, int currseets);
     void print();
-
     Course getcourse(string name);
 
 };

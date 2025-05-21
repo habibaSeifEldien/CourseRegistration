@@ -22,31 +22,28 @@ void Admin::manageGrades(string id)
 	string coursename;
 	cin >> coursename;
 
-	if (n == "Update")
-		updateGrades(id, coursename);
-	else if (n == "add grades")
-		AddGrades(id, coursename);
+	/*if (n == "Update")
+		updateGrades(id, coursename);*/
+		//else if (n == "add grades")
+			//AddGrades(id, coursename);
 
 }
-void Admin::updateGrades(string studid, string coursename)
+void Admin::updateGrades(Student& s, string coursename, int grade, int choice)
 {
-	map<string, tuple<float, float, float, char, int>>& grade = st.getstudent(studid).grades;
-	float midterm = get<0>(grade[coursename]);
-	float yearwork = get<1>(grade[coursename]);
-	float final = get<2>(grade[coursename]);
+	unordered_map<string, tuple<float, float, float, string, int>>& grades = s.grades;
+	float midterm = get<0>(grades[coursename]);
+	float yearwork = get<1>(grades[coursename]);
+	float final = get<2>(grades[coursename]);
 	char letter; int points;
-	string choice;
-	cout << "what did you need to change midterm or yearwork ?";
-	cin >> choice;
-	if (choice == "Midterm")
+
+	if (choice == 1)
 	{
-		cout << "the new midterm grade?";
-		cin >> midterm;
+		midterm = grade;
 	}
-	else if (choice == "Yearwok")
+	else if (choice == 2)
 	{
-		cout << "the new yearwork grade?";;
-		cin >> yearwork;
+		yearwork = grade;
+
 	}
 	int total = final + midterm + yearwork;
 	if (total >= 90) {
@@ -64,65 +61,48 @@ void Admin::updateGrades(string studid, string coursename)
 	else {
 		letter = 'F'; points = 0;
 	}
-	Student s = this->st.getstudent(studid);
 	calculatGpa(s);
-	grade[coursename] = make_tuple(midterm, yearwork, final, letter, points);
+	grades[coursename] = make_tuple(midterm, yearwork, final, letter, points);
 
 }
-void Admin::AddGrades(string id, string coursename)
+bool Admin::AddGrades(Student& s, string coursename, int grade, int choice, string g)
 {
-	Student& s = st.getstudent(id);
+	bool found = false;
 	for (auto it : s.registedcourses)
 	{
 		if (coursename == it)
 		{
-			cout << "What do you want to add?\n";
-			cout << "1. Midterm\n";
-			cout << "2. Yearwork\n";
-			cout << "3. Final\n";
-			cout << "4 LetterGrade\n";
-			cout << "5. Points\n";
-			cout << "6. All\n";
-			int choice; cin >> choice;
+			found = true;
 			switch (choice)
 			{
 			case 1:
 				cout << "enter the midterm ";
-				float midterm; cin >> midterm;
-				get<0>(s.grades[it]) = midterm;
+				get<0>(s.grades[it]) = grade;
 				break;
 			case 2:
 				cout << "enter the yearwork ";
-				float yearwork; cin >> yearwork;
-				get<1>(s.grades[it]) = yearwork;
+				get<1>(s.grades[it]) = grade;
 				break;
 			case 3:
 				cout << "enter the final ";
-				float final; cin >> final;
-				get<2>(s.grades[it]) = final;
+				get<2>(s.grades[it]) = grade;
 				break;
 
 			case 4:
 				cout << "enter the grade ";
-				char grade; cin >> grade;
-				get<3>(s.grades[it]) = grade;
+				get<3>(s.grades[it]) = g;
 				break;
 			case 5:
 				cout << "enter the points ";
 				int points; cin >> points;
-				get<4>(s.grades[it]) = points;
+				get<4>(s.grades[it]) = grade;
 				break;
-			case 6:
-				cout << "enter the all the grade ";
-				float year, mid, finall; int point; char letter; cin >> mid >> year >> finall >> letter >> point;
-				s.grades[it] = make_tuple(mid, year, finall, letter, point);
-				break;
-
 			}
 
 		}
 	}
 	calculatGpa(s);
+	return found;
 
 }
 void Admin::calculatGpa(Student& s)
@@ -138,24 +118,24 @@ void Admin::calculatGpa(Student& s)
 	s.gpa = (pro / sum);
 }
 
-void Admin::waitlist(Student& student)
-{
-	Wlist.push_back(student);
-	for (auto it : Wlist)
-	{
-		for (auto k : it.registedcourses)
-			
-			if (it.dropCourse(k) == true)
-			{
-				it.registedcourses.insert(k);
-				if (!Wlist.empty())
-					Wlist.pop_front();//then send message to this student that he registed this course and does not become on the waitlist anymore;
-				else cout << "NO Waitlist for this Course: ";
-
-			}
-	}
-
-}
+//void Admin::waitlist(Student& student)
+//{
+//	Wlist.push_back(student);
+//	for (auto it : Wlist)
+//	{
+//		for (auto k : it.registedcourses)
+//
+//			if (it.dropCourse(k) == true)
+//			{
+//				it.registedcourses.insert(k);
+//				if (!Wlist.empty())
+//					Wlist.pop_front();//then send message to this student that he registed this course and does not become on the waitlist anymore;
+//				else cout << "NO Waitlist for this Course: ";
+//
+//			}
+//	}
+//
+//}
 void Admin::printCourses()
 {
 	for (auto& course : file.courses) {
@@ -165,44 +145,26 @@ void Admin::printCourses()
 	}
 }
 
-void Admin::setprereq(Course& c) {
-	string userinp;
-	string pre;
-	cout << "Enter the prerequisties for this course";
-	cin >> pre;
-	c.preReqisites.push_back(pre);
-	cout << "do you want to continue?";
-	cin >> userinp;
-	if (userinp == "Yes" || userinp == "yes") {
-		setprereq(c);
+void Admin::setprereq(Course& c, list<string>l) {
+	for (auto pre : l) {
+		c.preReqisites.push_back(pre);
 	}
+}
+void Admin::UpdateMaxSeats(Course& c, int mxseat)
+{
+	c.maxseats = mxseat;
+}
+void Admin::UpdateInstructor(Course& c, string instname)
+{
 
-}
-void Admin::UpdateMaxSeats(Course& c)
-{
-	int newMaxSeats;
-	cout << "Enter the new maximum number of seats: ";
-	cin >> newMaxSeats;
-	c.maxseets = newMaxSeats;
-	cout << "Max seats for course \"" << c.courseTitle << "\" = " << newMaxSeats << endl;
-}
-void Admin::UpdateInstructor(Course& c)
-{
-	string newInstructor;
-	cout << "Enter the new instructor name: ";
-	getline(cin, newInstructor);
-	c.instructor = newInstructor;
-	cout << "Instructor for the course \"" << c.courseTitle << "\" is now \"" << newInstructor << "\"." << endl;
+	c.instructor = instname;
 }
 void Admin::Upload_Course(string courseCode, int courseHours, string courseTitle, string instructor, list<string> preReqisites, int maxseets) {
-	Course newCourse(courseCode, courseHours, courseTitle, instructor, preReqisites, maxseets);
+	Course newCourse(courseCode, courseHours, courseTitle, instructor, preReqisites, maxseets, 0);
 	file.courses[newCourse.courseTitle] = newCourse;
-
-
 }
-void Admin::DeleteCourse(string courseTitle)
+bool Admin::DeleteCourse(string courseTitle)
 {
-
 	string Input;
 	for (char c : courseTitle) {
 		if (!isspace(c))
@@ -223,57 +185,34 @@ void Admin::DeleteCourse(string courseTitle)
 			cout << "Course \"" << it->first << "\" has been deleted successfully." << endl;
 			file.courses.erase(it);
 			found = true;
-			break;
+			return true;
 		}
 	}
 
 	if (!found) {
 		cout << "Course \"" << courseTitle << "\" was not found." << endl;
+		return false;
 	}
 }
-void Admin::UpdatePrereq(Course& c) {
-	string inp;
-	cout << "do you want to add or remove?";
-	cin >> inp;
-	if (inp == "add") {
-		setprereq(c);
+bool Admin::UpdatePrereq(Course& c, string prereq, bool add) {
+	if (add) {
+		c.preReqisites.push_back(prereq);
+		//setprereq(c);
 	}
-	else if (inp == "remove") {
-		string title;
-		cout << "what is the title of the course you want to remove from " + c.courseTitle + " prerequisties?";
-		cin >> title;
+	else {
+
 		bool found = false;
 		for (string pre : c.preReqisites) {
-			if (pre == title) {
+			if (pre == prereq) {
 				found = true;
 				c.preReqisites.remove(pre);
-				cout << "the course is removed succesfully";
-				break;
+				return true;
+
 			}
 		}
-		if (!found)
-			cout << "this course is not found in " + c.courseTitle + " prerequisties";
-	}
-}
-Course& Admin::findCourse(string courseTitle)
-{
-	string normalizedInput;
-	for (char c : courseTitle) {
-		if (!isspace(c))
-			normalizedInput += tolower(c);
-	}
-
-	for (auto& pair : file.courses) {
-		string normalizedKey;
-		for (char c : pair.first) {
-			if (!isspace(c))
-				normalizedKey += tolower(c);
+		if (!found) {
+			return false;
 		}
 
-		if (normalizedKey == normalizedInput) {
-			return pair.second;
-		}
 	}
-
-	throw runtime_error("Course not found");
 }

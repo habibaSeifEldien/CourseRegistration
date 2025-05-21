@@ -12,7 +12,7 @@ class Student
 public:
     Student();
     Student(string studentId, string studentName, int year, int maxcredithr);
-
+    files file;
     string id;
     string name;
     string studentemail;
@@ -26,12 +26,12 @@ public:
     int maxhours = 16;
     float gpa = NULL;
     set<string>registedcourses;
-    map<string, tuple<float, float, float, char, int>>grades;
-    bool dropCourse(string coursename);
+    unordered_map<string, tuple<float, float, float, string, int>>grades;
+    bool dropCourse(Course& course);
     string toLower(string s);
     void viewGrade();
-    void showAvailableCourses(map<string, Course>file);
-    void searchforCourses(map<string, Course> file);
+    void showAvailableCourses(unordered_map<string, Course>file);
+    void searchforCourses(unordered_map<string, Course> file);
     bool checkPrerequisites(Course& course);
     bool registration(Course& c);
     Student& getstudent(string id);

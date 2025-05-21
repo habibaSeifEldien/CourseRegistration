@@ -31,6 +31,7 @@ public:
     void loadAdminsFromCSV();
     void loadStudents();
     void loadGradesForStudent();
+    string getNextStudentID();
 
 
 };

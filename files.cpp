@@ -94,10 +94,9 @@ void files::loadGradesForStudent() {
         float midterm = stoi(midtermStr);
         float yearwork = stoi(yearworkStr);
         float finalExam = stoi(finalStr);
-        char grade = gradeStr[0];
         int points = stoi(pointsStr);
 
-        auto courseData = make_tuple(midterm, yearwork, finalExam, grade, points);
+        auto courseData = make_tuple(midterm, yearwork, finalExam, gradeStr, points);
 
         if (this->students.count(studentID))
             this->students[studentID].grades[courseTitle] = courseData;
@@ -111,7 +110,7 @@ void files::loadCourses() {
     ifstream file("course.csv");
     string line;
 
-    getline(file, line);
+    getline(file, line); // skip header line
 
     while (getline(file, line)) {
         istringstream iss(line);
@@ -132,19 +131,20 @@ void files::loadCourses() {
             }
         }
 
-
-        iss >> c.maxseets;
-        iss.ignore();
-        iss >> c.courseHours;
-        iss.ignore();
+        getline(iss, cell, ',');
+        c.maxseats = stoi(cell);
+        getline(iss, cell, ',');
+        c.courseHours = stoi(cell);
+        getline(iss, cell, ',');
+        c.currseats = stoi(cell);
 
         courses[c.courseTitle] = c;
-
     }
+
     file.close();
-    return;
 }
-void files::saveCoursesToFile(const map<string, Course>& courses) {
+
+void files::saveCoursesToFile() {
     ofstream file("course.csv");
 
     if (!file.is_open()) {
@@ -165,8 +165,10 @@ void files::saveCoursesToFile(const map<string, Course>& courses) {
             file << pre << " ";
         }
 
-        file << "," << c.maxseets;
+        file << "," << c.maxseats;
         file << "," << c.courseHours;
+        file << "," << c.currseats;
+
         file << "\n";
     }
 
@@ -193,7 +195,7 @@ void files::saveGradesToFile() {
             float midterm = get<0>(gradeData);
             float yearwork = get<1>(gradeData);
             float finalExam = get<2>(gradeData);
-            char grade = get<3>(gradeData);
+            string grade = get<3>(gradeData);
             int points = get<4>(gradeData);
 
 
@@ -291,8 +293,33 @@ void files::loadAdminsFromCSV() {
     file.close();
     cout << "Student data loaded successfully!" << endl << endl;
 }
+std::string files::getNextStudentID() {
+    std::ifstream file("students.csv");
+    std::string line;
+    long long maxID = 0;
 
-map<string, Admin> files::adminMails;
-map<string, Student>files::mails;
-map<string, Course>files::courses;
-map<string, Student>files::students;
+    while (std::getline(file, line)) {
+        if (line.empty()) continue;
+
+        std::stringstream ss(line);
+        std::string id;
+        std::getline(ss, id, ',');
+
+        try {
+            long long idNum = std::stoll(id);
+            if (idNum > maxID) {
+                maxID = idNum;
+            }
+        }
+        catch (const std::exception& e) {
+            // If the ID is not a number, just skip the line
+            continue;
+        }
+    }
+
+    return std::to_string(maxID + 1);
+}
+unordered_map<string, Admin> files::adminMails;
+unordered_map<string, Student>files::mails;
+unordered_map<string, Course>files::courses;
+unordered_map<string, Student>files::students;
